@@ -1,0 +1,22 @@
+import { Navbar, NavbarBrand } from "reactstrap";
+import styles from "./styles.module.scss";
+import logo from "./logo.png";
+
+const Header = () => {
+  return (
+    <div className={styles.header}>
+      <div className={styles.logo}>
+        <img className={styles.img} src={logo} alt="Logo" />
+        <h1>PWA</h1>
+      </div>
+      <Navbar container={false} className={styles.navBar}>
+        <NavbarBrand className={styles.link} href="/">
+          Login
+        </NavbarBrand>
+        <NavbarBrand href="/">Register</NavbarBrand>
+      </Navbar>
+    </div>
+  );
+};
+
+export default Header;
