@@ -1,5 +1,4 @@
 import { Table as TableReact } from "reactstrap";
-import _ from "lodash";
 
 const Table = ({ columns = [], rows = {
     data: [],
@@ -20,7 +19,7 @@ const Table = ({ columns = [], rows = {
             <tr key={`${row.id}_row`}>
             {
                 columns.map((column) => {
-                    return <td key={`${column}_row_column`}>{_.get(row, column)}</td>;
+                    return <td key={`${column}_row_column`}>{row[column]}</td>;
                 })
             }
             </tr>
