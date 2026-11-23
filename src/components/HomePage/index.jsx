@@ -1,17 +1,51 @@
+import React, { useState } from "react";
+import styles from "./styles.module.scss";
 import { Row, Col, Container } from "reactstrap";
 import LoginForm from "../LoginForm";
-import styles from "./styles.module.scss";
-
+import QrRead from "../QrcodeRead";
 const HomePage = () => {
+  const [showQRCode, setQrCode] = useState(false);
+  const [dataQrCode, setDataQrCode] = useState({});
   return (
     <Container>
       <Row className={styles.row}>
+        {
+        /* ESTAVA SSIM ANTES DO CLAUDE
+        
+        <Col className={styles.col}>
+          <LoginForm title="Admin" role="admin" data={dataQrCode}/>
+          <div className={styles.qrContainer}>
+            {showQRCode && <QrRead setDataLogin={setDataQrCode} />}
+            {
+              <button onClick={() => setQrCode(!showQRCode)}>
+                Login with Qr Code 2222
+              </button>
+            }
+          </div>
+        </Col>
+        <Col>
+          <LoginForm title="User" role="user" data={dataQrCode} />
+          <div className={styles.qrContainer}>
+            {showQRCode && <QrRead setDataLogin={setDataQrCode} />}
+            {
+              <button onClick={() => setQrCode(!showQRCode)}>
+                Login with Qr Code
+              </button>
+            }
+          </div>
+        </Col> */}
         <Col className={styles.col}>
           <LoginForm title="Admin" role="admin" />
+        </Col>
+        <Col>
+          <LoginForm title="User" role="user" data={dataQrCode} />
+          <div className={styles.qrContainer}>
+            {showQRCode && <QrRead setDataLogin={setDataQrCode} />}
+            <button onClick={() => setQrCode(!showQRCode)}>Login with Qr Code</button>
+          </div>
         </Col>
       </Row>
     </Container>
   );
 };
-
 export default HomePage;

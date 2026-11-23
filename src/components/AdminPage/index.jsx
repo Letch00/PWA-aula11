@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styles from "./styles.module.scss";
 import {
   Row,
@@ -12,9 +12,15 @@ import {
 import Stadium from "./components/Stadium";
 import Users from "./components/Users";
 import Tickets from "./components/Tickets";
+import Games from "./components/Games";
+
+import { TabContext } from "./contexts";
+
 
 const AdminPage = () => {
   const [activePage, setActivePage] = useState("1");
+  const { countGames } = useContext(TabContext)
+  console.log("games: ", countGames)
 
   const navItems = [
     {
@@ -28,6 +34,12 @@ const AdminPage = () => {
     {
       id: "3",
       title: "Tickets",
+    },
+
+    {
+      id: "4",
+      title: "Games",
+      count: countGames
     },
   ];
 
@@ -44,21 +56,25 @@ const AdminPage = () => {
       id: "3",
       children: <Tickets />,
     },
+    {
+      id: "4",
+      children: <Games />
+    },
   ];
 
   return (
     <Container className={styles.container}>
       <h1>Admin</h1>
-      <Row className={styles.row}>
+     <Row className={styles.row}>
         <Nav tabs>
           {navItems.map((item) => {
             return (
-              <NavItem key={item.id}>
+              <NavItem>
                 <NavLink
                   className={item.id === activePage}
                   onClick={() => setActivePage(item.id)}
                 >
-                  {item.title}
+                  {item.title} {item.count &&  (<span className={styles.count}>{item.count}</span>)}
                 </NavLink>
               </NavItem>
             );

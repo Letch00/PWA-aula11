@@ -1,16 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import Table from "../../../Table";
 import { useForm } from "react-hook-form";
 import styles from "./styles.module.scss";
+import { UsersContext } from "../../../../contexts/UsersProvider";
+import { usePostData } from "../../hooks/usePostData";
+import { useGetData } from "../../hooks/useGetData";
+import { getUsers, createUser } from "../../../../services/api/users";
+import { TabContext } from "../../contexts";
 
 const Users = () => {
   const { register, handleSubmit } = useForm();
-  const [isError, setError] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState({ data: [], pagination: {} });
+  const { setUsers } = useContext(UsersContext)
+  const { isError, isLoading, data, load } = useGetData(getUsers, 0, 0)
+  const { isLoading: isLoadingPost, addData } = usePostData(createUser)
+  const { setClicksCount, countClicks } = useContext(TabContext);
 
-  const fetchUsers = () => {
+  useEffect(() => {
+    setUsers(data.data);
+  }, [data, setUsers]);
+
+/*   const fetchUsers = () => {
     setLoading(true);
 
     fetch("/api/users", {
@@ -30,16 +40,13 @@ const Users = () => {
       .finally(() => {
         setLoading(false);
       });
-  };
+  }; */
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const addUser = (formData) => {
     const newData = {
       ...formData,
-      role: { name: "user", scopes: "notMember" },
+      role: { name: "user", scope: "notMember" },
     };
 
     fetch("/api/users", {
@@ -49,7 +56,7 @@ const Users = () => {
     })
       .then((response) => {
         if (response.ok) {
-          fetchUsers();
+          load();
           alert("Pedido Efetuado com sucesso");
         } else {
           alert("Error ao adicionar");
@@ -69,11 +76,16 @@ const Users = () => {
     return <div>UPPSSSS</div>;
   }
 
+  const handleClick = () => {
+    setClicksCount(countClicks + 1);
+  };
+
   return (
     <Container>
       <Row>
         <Col className={styles.column}>
           <h3>Create User</h3>
+          <button onClick={handleClick}>Nº Clickes: {countClicks}</button>
           <div className={styles.container}>
             <form className={styles.form} onSubmit={handleSubmit(addUser)}>
               <div className={styles.field}>
@@ -147,10 +159,12 @@ const Users = () => {
           </div>
         </Col>
         <Col>
-          <Table columns={["name", "email"]} rows={data} />
+          <Table columns={["name", "email", "age", "country"]} rows={data} />
         </Col>
       </Row>
     </Container>
+
+
   );
 };
 

@@ -11,7 +11,8 @@ export const useAuth = () => {
         })
         .then((response) => response.json())
         .then((response) => {
-            setValidLogin(response.auth);
+            const isAdmin = response.auth && response.decoded?.includes("admin");
+            setValidLogin(isAdmin);
         })
         .catch(() => {
             setValidLogin(false);

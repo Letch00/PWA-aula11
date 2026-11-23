@@ -1,9 +1,10 @@
 import { Table as TableReact } from "reactstrap";
+import _ from "lodash";
 
 const Table = ({ columns = [], rows = {
-    data: [],
-    pagination: {}
-}}) => {
+  data: [],
+  pagination: {}
+} }) => {
   return (
     <TableReact hover>
       <thead>
@@ -17,11 +18,11 @@ const Table = ({ columns = [], rows = {
         {rows.data.map((row, index) => {
           return (
             <tr key={`${row.id}_row`}>
-            {
+              {
                 columns.map((column) => {
-                    return <td key={`${column}_row_column`}>{row[column]}</td>;
+                  return <td key={`${column}_row_column`}>{_.get(row, column)}</td>
                 })
-            }
+              }
             </tr>
           );
         })}

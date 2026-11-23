@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     hasLogin();
-  }, [hasLogin])
+  }, [])
 
   if(isFetching) {
       return <div>Loading</div>

@@ -1,3 +1,5 @@
+/* TAVA ASSIM ANTES DO EX7 FICHA 6
+
 import { useForm } from "react-hook-form";
 import { Row } from "reactstrap";
 import { Navigate } from "react-router-dom";
@@ -25,7 +27,7 @@ const LoginForm = ({ title, role }) => {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error: aaaaaaaaaaaaa", error);
       });
   };
 
@@ -60,6 +62,72 @@ const LoginForm = ({ title, role }) => {
               required
               {...register("password")}
             />
+          </div>
+          <input className="submit" type="submit" />
+        </form>
+      </div>
+    </Row>
+  );
+};
+
+export default LoginForm;
+ */
+
+
+import { useForm } from "react-hook-form";
+import { Row } from "reactstrap";
+import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import _ from "lodash";
+import styles from "./styles.module.scss";
+import { login } from "../../services/api/auth";
+
+const LoginForm = ({ title, role, data }) => {
+  const { register, handleSubmit } = useForm();
+  const [isLogged, setLogged] = useState(false);
+
+  const authenticate = (credentials) => {
+    login(credentials)
+      .then((response) => {
+        if (response.auth) {
+          setLogged(response.auth);
+        } else {
+          alert("Login failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const onSubmit = (formData) => authenticate(formData);
+
+  useEffect(() => {
+    if (!_.isEmpty(data)) {
+      authenticate(data);
+    }
+  }, [data]);
+
+  if (isLogged) {
+    return role === "admin" ? (
+      <Navigate to="/admin" replace={true} />
+    ) : (
+      <Navigate to="/user" replace={true} />
+    );
+  }
+
+  return (
+    <Row align="middle" justify="center">
+      <div className={styles.loginForm}>
+        <h2>{title}</h2>
+        <form className={styles.formLogin} onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="name">Name:</label>
+            <input id="name" name="name" required {...register("name")} />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="password">Password:</label>
+            <input id="password" name="password" type="password" required {...register("password")} />
           </div>
           <input className="submit" type="submit" />
         </form>
